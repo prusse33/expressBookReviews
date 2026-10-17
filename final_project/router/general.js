@@ -1,43 +1,48 @@
 const express = require('express');
 let books = require("./booksdb.js");
-let isValid = require("./auth_users.js").isValid;
-let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-
-public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
-
-// Get the book list available in the shop
+// Получить список всех книг (Task 10 / Task 1)
 public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  res.send(JSON.stringify(books, null, 4));
 });
 
-// Get book details based on ISBN
+// Получить книгу по ISBN (Task 11 / Task 2)
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  res.send(books[isbn]);
  });
   
-// Get book details based on author
+// Получить книги по автору (Task 12 / Task 3)
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const author = req.params.author;
+  let filtered_books = [];
+  let keys = Object.keys(books);
+  keys.forEach((key) => {
+    if(books[key].author === author) {
+      filtered_books.push(books[key]);
+    }
+  });
+  res.send(JSON.stringify({booksbyauthor: filtered_books}, null, 4));
 });
 
-// Get all books based on title
+// Получить книги по названию (Task 13 / Task 4)
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const title = req.params.title;
+  let filtered_books = [];
+  let keys = Object.keys(books);
+  keys.forEach((key) => {
+    if(books[key].title === title) {
+      filtered_books.push(books[key]);
+    }
+  });
+  res.send(JSON.stringify({booksbytitle: filtered_books}, null, 4));
 });
 
-//  Get book review
+// Получить отзывы по книге
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  res.send(books[isbn].reviews);
 });
 
 module.exports.general = public_users;
